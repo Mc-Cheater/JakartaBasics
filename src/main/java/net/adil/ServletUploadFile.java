@@ -68,7 +68,7 @@ public class ServletUploadFile extends HttpServlet {
 			} else {
 			out.println("<b>File:</b><br/>\n<pre>" + fileItem.getString() +
 			"</pre><br/>");
-			String directoryPath = "D:\\";
+			String directoryPath = "C:\\Users\\Adil\\Desktop";
 			String fileName = "myFile.txt";
 			File dest = new File(directoryPath, fileName);
 			FileOutputStream fos = new FileOutputStream(dest);
