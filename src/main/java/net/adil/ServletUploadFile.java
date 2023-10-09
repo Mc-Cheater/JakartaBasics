@@ -13,8 +13,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload2.core.DiskFileItemFactory;
-import org.apache.commons.fileupload2.javax.JavaxServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.apache.tomcat.util.http.fileupload.RequestContext;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
+
 /*import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
@@ -26,7 +31,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 @WebServlet({ "/ServletUploadFile", "/servletUploadFile" })
 public class ServletUploadFile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -41,11 +46,11 @@ public class ServletUploadFile extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-	
+		ServletRequestContext helper= new ServletRequestContext(request);
 		
 		
 		PrintWriter out=response.getWriter();
-		if(JavaxServletFileUpload.isMultipartContent(request)){
+		if(ServletFileUpload.isMultipartContent(request)){
 			// create a factory for disk-based (large) file items
 			DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 			fileItemFactory.setSizeThreshold(40960); /* the unit is bytes */
@@ -54,7 +59,7 @@ public class ServletUploadFile extends HttpServlet {
 			servletFileUpload.setSizeMax(81920); /* the unit is bytes */
 			try
 			{
-			List<?> fileItemsList = servletFileUpload.parseRequest(request);
+			List<?> fileItemsList = servletFileUpload.parseRequest(helper);
 			Iterator<?> it = fileItemsList.iterator();
 			while (it.hasNext()) {
 			DiskFileItem fileItem = (DiskFileItem) it.next();
